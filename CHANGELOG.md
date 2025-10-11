@@ -2,6 +2,22 @@
 
 Todas as mudanças notáveis neste projeto serão documentadas neste arquivo.
 
+## [1.5.1] - 2025-10-11
+
+### 🐳 Otimizado
+- **Dockerfile - Redução de Layers**:
+  - Combinados comandos RUN para criação de usuário e mudança de ownership
+  - Redução de 2 layers para 1 layer
+  - Mantém todas as funcionalidades e segurança (non-root user)
+  - Remoção do arquivo de teste `events.json`
+
+### 📊 Métricas de Performance
+- **Build**: 144MB (otimizado)
+- **Startup**: Container healthy em 14 segundos
+- **Recursos**: 16MB RAM, 0% CPU (idle)
+- **Health Checks**: ✅ Funcionando
+- **Endpoints**: ✅ Todos operacionais
+
 ## [1.5.0] - 2025-10-11
 
 ### ✨ Adicionado
