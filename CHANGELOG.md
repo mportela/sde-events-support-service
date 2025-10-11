@@ -17,6 +17,10 @@ Todas as mudanças notáveis neste projeto serão documentadas neste arquivo.
   - Removido step de linter do CI (não configurado)
   - CI agora roda apenas `npm test` e `npm run test:coverage`
   - Todos os testes unificados em `__tests__/*.test.ts`
+- **Docker Build no CI**: 
+  - Adicionado `load: true` no docker/build-push-action
+  - Corrige erro "image not found" ao executar teste do container
+  - Imagem agora é carregada corretamente no Docker local após build
 
 ## [1.4.0] - 2025-10-11
 
