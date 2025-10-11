@@ -29,12 +29,10 @@ RUN npm ci --only=production
 # Copy built application from builder stage
 COPY --from=builder /app/dist ./dist
 
-# Create non-root user
+# Create non-root user and change ownership
 RUN addgroup -g 1001 -S nodejs && \
-  adduser -S nodejs -u 1001
-
-# Change ownership
-RUN chown -R nodejs:nodejs /app
+  adduser -S nodejs -u 1001 && \
+  chown -R nodejs:nodejs /app
 
 # Switch to non-root user
 USER nodejs
