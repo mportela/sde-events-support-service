@@ -18,9 +18,9 @@ router.get('/:date', async (req: Request, res: Response, next: NextFunction) => 
 
     const events = await eventsService.getEventsByDate(date);
 
-    res.status(200).json({ events });
+    return res.status(200).json({ events });
   } catch (error) {
-    next(error);
+    return next(error);
   }
 });
 
