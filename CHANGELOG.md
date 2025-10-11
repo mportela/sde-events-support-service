@@ -2,6 +2,28 @@
 
 Todas as mudanças notáveis neste projeto serão documentadas neste arquivo.
 
+## [1.6.0] - 2025-10-11
+
+### ⬆️ Atualizado
+- **Node.js 24.x**:
+  - Atualização para Node.js 24 LTS (versão mais recente)
+  - Dockerfile usa `node:24-alpine`
+  - `.nvmrc` atualizado para versão 24
+  - `@types/node` atualizado para v24
+  - Especificação `engines` em package.json: `>=20.0.0`
+
+### 🧪 Testes Multi-versão
+- **CI/CD Matrix Testing**:
+  - Node.js 20.x ✅
+  - Node.js 22.x ✅
+  - Node.js 24.x ✅
+  - Cobertura de código executada na v24
+  - Build e deploy usando v24
+
+### 📚 Documentação
+- README atualizado com badge Node.js 24
+- Requisitos documentando compatibilidade com 20.x, 22.x e 24.x
+
 ## [1.5.1] - 2025-10-11
 
 ### 🐳 Otimizado

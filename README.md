@@ -4,7 +4,7 @@ Backend service para suporte de eventos do SDE.
 
 [![CI/CD Pipeline](https://github.com/mportela/sde-events-support-service/actions/workflows/ci.yml/badge.svg)](https://github.com/mportela/sde-events-support-service/actions/workflows/ci.yml)
 [![codecov](https://codecov.io/gh/mportela/sde-events-support-service/branch/main/graph/badge.svg)](https://codecov.io/gh/mportela/sde-events-support-service)
-[![Node.js](https://img.shields.io/badge/Node.js-20.11.0-green.svg)](https://nodejs.org/)
+[![Node.js](https://img.shields.io/badge/Node.js-24-green.svg)](https://nodejs.org/)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.3.3-blue.svg)](https://www.typescriptlang.org/)
 [![Docker](https://img.shields.io/badge/Docker-Ready-2496ED.svg)](https://www.docker.com/)
 
@@ -25,7 +25,8 @@ npm install && npm run dev
 ## Requisitos
 
 ### Opção 1: Local
-- Node.js 20.11.0 (use nvm para gerenciar versões)
+- Node.js 24.x (use nvm para gerenciar versões)
+- Compatível com Node.js 20.x e 22.x
 
 ### Opção 2: Docker
 - Docker & Docker Compose
