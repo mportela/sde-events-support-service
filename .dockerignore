@@ -1,0 +1,36 @@
+# Docker
+node_modules/
+npm-debug.log
+dist/
+build/
+
+# Git
+.git
+.gitignore
+
+# Environment
+.env
+.env.local
+.env.*.local
+
+# IDE
+.vscode
+.idea
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Documentation
+README.md
+API_TESTS.md
+DOCKER.md
+
+# CI/CD
+.github
+
+# Logs
+logs
+*.log
