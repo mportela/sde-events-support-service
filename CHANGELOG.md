@@ -2,6 +2,14 @@
 
 Todas as mudanças notáveis neste projeto serão documentadas neste arquivo.
 
+## [1.4.2] - 2025-10-11
+
+### 📚 Documentação
+- **Badge do GitHub Actions no README**:
+  - Adicionado badge de status do CI/CD Pipeline
+  - Badge mostra status em tempo real dos workflows
+  - Link direto para a página de Actions do repositório
+
 ## [1.4.1] - 2025-10-11
 
 ### 🔒 Segurança

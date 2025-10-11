@@ -1,10 +1,13 @@
-# SDE Events Suppo🏠 **[Índice de Documentação](docs/INDEX.md)** | 📖 **[Guia Rápido Docker](docs/DOCKER_QUICKSTART.md)** | 📖 **[Doc Completa](docs/DOCKER.md)** | 🧪 **[Testes](docs/TESTING.md)** | 📡 **[API Tests](docs/API_TESTS.md)**t Service
+# SDE Events Support Service
 
 Backend service para suporte de eventos do SDE.
 
+[![CI/CD Pipeline](https://github.com/mportela/sde-events-support-service/actions/workflows/ci.yml/badge.svg)](https://github.com/mportela/sde-events-support-service/actions/workflows/ci.yml)
 [![Node.js](https://img.shields.io/badge/Node.js-20.11.0-green.svg)](https://nodejs.org/)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.3.3-blue.svg)](https://www.typescriptlang.org/)
 [![Docker](https://img.shields.io/badge/Docker-Ready-2496ED.svg)](https://www.docker.com/)
+
+🏠 **[Índice de Documentação](docs/INDEX.md)** | 📖 **[Guia Rápido Docker](docs/DOCKER_QUICKSTART.md)** | 📖 **[Doc Completa](docs/DOCKER.md)** | 🧪 **[Testes](docs/TESTING.md)** | 📡 **[API Tests](docs/API_TESTS.md)**
 
 ## 🚀 Início Rápido
 
