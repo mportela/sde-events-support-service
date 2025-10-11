@@ -2,6 +2,15 @@
 
 Todas as mudanças notáveis neste projeto serão documentadas neste arquivo.
 
+## [1.4.3] - 2025-10-11
+
+### 📚 Documentação
+- **Badge de Cobertura de Código (Codecov)**:
+  - Adicionado badge mostrando porcentagem de code coverage
+  - Badge atualizado automaticamente após cada CI/CD run
+  - Link direto para dashboard detalhado do Codecov
+  - Cobertura atual: ~98%+ (statements, functions, lines)
+
 ## [1.4.2] - 2025-10-11
 
 ### 📚 Documentação

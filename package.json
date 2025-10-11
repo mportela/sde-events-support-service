@@ -1,6 +1,6 @@
 {
   "name": "sde-events-support-service",
-  "version": "1.4.2",
+  "version": "1.4.3",
   "description": "Backend service for SDE events support",
   "main": "dist/server.js",
   "type": "module",
