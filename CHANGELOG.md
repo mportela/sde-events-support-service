@@ -2,6 +2,47 @@
 
 Todas as mudanças notáveis neste projeto serão documentadas neste arquivo.
 
+## [1.5.0] - 2025-10-11
+
+### ✨ Adicionado
+- **🔍 ESLint - Linter para TypeScript**:
+  - Configuração moderna do ESLint 9+ com flat config
+  - Suporte completo para TypeScript com `@typescript-eslint`
+  - Integração com CI/CD pipeline
+  - Scripts npm: `lint` e `lint:fix`
+  
+### 🔧 Configuração do Linter
+- **Regras TypeScript**:
+  - No explicit any (warning)
+  - No unused vars com ignore para variáveis prefixadas com `_`
+  - Type-checked rules habilitadas
+  
+- **Boas Práticas**:
+  - Prefer const over let
+  - No var allowed
+  - Strict equality (===)
+  - Always use curly braces
+  - Semicolons obrigatórios
+  - Single quotes (com escape permitido)
+  - Trailing commas em multiline
+  
+- **Arquivos Ignorados**:
+  - dist/
+  - coverage/
+  - node_modules/
+  - Config files (*.config.js, jest.setup.js)
+
+### 📦 Dependências Adicionadas
+- `eslint@^9.x` - Core do ESLint
+- `@eslint/js@^9.x` - Configurações recomendadas
+- `@typescript-eslint/parser@^8.x` - Parser TypeScript
+- `@typescript-eslint/eslint-plugin@^8.x` - Regras TypeScript
+- `typescript-eslint@^8.x` - Utilitários TypeScript
+
+### 🚀 CI/CD Atualizado
+- Adicionado step "Run linter" antes do type check
+- Falha do lint bloqueia o build
+
 ## [1.4.3] - 2025-10-11
 
 ### 📚 Documentação

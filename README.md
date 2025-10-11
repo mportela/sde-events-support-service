@@ -118,6 +118,17 @@ npm run build
 npm start
 ```
 
+#### Linting
+```bash
+# Verificar código
+npm run lint
+
+# Corrigir automaticamente
+npm run lint:fix
+```
+
+📖 **[Ver documentação completa do linter](docs/LINTING.md)**
+
 #### Type Check
 ```bash
 npm run type-check
