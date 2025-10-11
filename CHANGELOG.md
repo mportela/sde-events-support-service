@@ -10,6 +10,14 @@ Todas as mudanças notáveis neste projeto serão documentadas neste arquivo.
   - API agora permite somente requisições GET, aumentando a segurança
   - Atualização dos testes para refletir a nova política de métodos HTTP
 
+### 🐛 Correções
+- **TypeScript Type Check**: Adicionado `return` explícito na rota de eventos para corrigir erro TS7030
+- **CI/CD Simplificado**: 
+  - Removidos scripts `test:unit` e `test:integration` (não usados)
+  - Removido step de linter do CI (não configurado)
+  - CI agora roda apenas `npm test` e `npm run test:coverage`
+  - Todos os testes unificados em `__tests__/*.test.ts`
+
 ## [1.4.0] - 2025-10-11
 
 ### ✨ Adicionado
