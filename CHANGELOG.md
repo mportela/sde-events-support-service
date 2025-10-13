@@ -2,6 +2,82 @@
 
 Todas as mudanças notáveis neste projeto serão documentadas neste arquivo.
 
+## [1.7.0] - 2025-10-12
+
+### ✨ Adicionado
+- **Nova rota `/jogos/:id`**:
+  - Endpoint para buscar detalhes de jogos específicos
+  - Parser para dados da API do SDE (jogos)
+  - Repository, Service e Routes seguindo arquitetura existente
+  - Cache LRU compartilhado para requests de jogos
+  
+### 🏗️ Arquitetura
+- **Types (`jogo.types.ts`)**:
+  - Interfaces para Jogo, JogoPlayer, JogoTeam
+  - Types para resposta da API do SDE (SDEJogoResponse)
+  
+- **Parser (`jogoParser.ts`)**:
+  - `parseSDEJogo()`: converte resposta do SDE para formato interno
+  - `createMockJogo()`: cria dados mock para testes
+  - Extração de jogadores da escalação com fotos contextuais
+  
+- **Client SDE**:
+  - Método `getJogo(jogoId)` para buscar jogos
+  - Cache LRU compartilhado com eventos
+  
+- **Repository (`JogosRepository`)**:
+  - `getJogo(jogoId)`: busca jogo da API
+  - Métodos de cache (`clearCache`, `getCacheStats`)
+  
+- **Service (`JogosService`)**:
+  - Camada de negócio para jogos
+  - Validação de jogoId
+  
+- **Routes (`/jogos/:id`)**:
+  - GET com parâmetro de ID
+  - Tratamento de erros
+  - CORS configurado
+
+### 🧪 Testes
+- **102 testes passando** (5 novos testes):
+  - Parser de jogos (2 testes)
+  - Rota de jogos (3 testes)
+- **Cobertura mantida**: 98%+
+
+### 📊 Resposta da API
+```json
+{
+  "id": "334218",
+  "nome": "Botafogo x Flamengo",
+  "esporte": {
+    "id": "1",
+    "slug": "futebol",
+    "nome": "Futebol"
+  },
+  "competicao": {
+    "nome": "Campeonato Brasileiro"
+  },
+  "times": [
+    {
+      "nome": "Botafogo",
+      "sigla": "BOT",
+      "escudo60x60": "https://...",
+      "escudoSvg": "https://...",
+      "jogadores": [
+        {
+          "nome": "Leonardo Matias Baiersdorf Linck",
+          "nome_popular": "Léo Linck",
+          "slug": "leolinck",
+          "sexo": "M",
+          "foto_319x388": "https://...",
+          "fotos_contextuais": []
+        }
+      ]
+    }
+  ]
+}
+```
+
 ## [1.6.0] - 2025-10-11
 
 ### ⬆️ Atualizado

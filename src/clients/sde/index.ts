@@ -1,9 +1,13 @@
 import LRUCache from '../../utils/cache/LRUCache.js';
 
 // Cache LRU para armazenar respostas da API do SDE
-// Capacidade: 20 entradas (datas diferentes)
+// Capacidade: 20 entradas
 const responseCache = new LRUCache<string, any>(20);
 
+/**
+ * Cliente genérico para comunicação com a API do SDE
+ * Responsável apenas por fazer requisições HTTP e gerenciar cache
+ */
 const sdeClient = {
   /**
    * Limpa o cache de respostas
@@ -19,11 +23,20 @@ const sdeClient = {
     return responseCache.getStats();
   },
 
-  async getEvents(date: string): Promise<any> {
+  /**
+   * Faz uma requisição GET genérica para a API do SDE
+   * @param path - Caminho relativo da API (ex: 'data/2025-10-11/eventos' ou 'jogos/334218')
+   * @param cacheKey - Chave única para cache (opcional)
+   * @returns Dados da resposta da API
+   */
+  async get(path: string, cacheKey?: string): Promise<any> {
+    // Usa o path como cache key se não for fornecida uma chave específica
+    const key = cacheKey || path;
+
     // Verifica se a resposta está em cache
-    const cachedResponse = responseCache.get(date);
+    const cachedResponse = responseCache.get(key);
     if (cachedResponse !== undefined) {
-      console.log(`[SdeClient] Returning cached response for date: ${date}`);
+      console.log(`[SdeClient] Returning cached response for: ${key}`);
       return cachedResponse;
     }
 
@@ -34,7 +47,7 @@ const sdeClient = {
       throw new Error('SDE_API_TOKEN is not configured');
     }
 
-    const url = `${baseUrl}/data/${date}/eventos`;
+    const url = `${baseUrl}/${path}`;
 
     console.log(`[SdeClient] Calling SDE API: ${url}`);
 
@@ -56,14 +69,13 @@ const sdeClient = {
       console.log(`[SdeClient] Successfully fetched data from SDE API`);
 
       // Armazena a resposta no cache
-      responseCache.set(date, data);
+      responseCache.set(key, data);
 
-      // A API retorna um objeto com referencias e resultados
       return data;
     } catch (error) {
       const errorMessage = error instanceof Error ? error.message : 'Unknown error';
       console.error('[SdeClient] Error calling SDE API:', errorMessage);
-      throw new Error(`Failed to fetch events from SDE API: ${errorMessage}`);
+      throw new Error(`Failed to fetch data from SDE API: ${errorMessage}`);
     }
   }
 };

@@ -2,9 +2,10 @@ import { afterEach, beforeEach, describe, expect, it, jest } from '@jest/globals
 import request from 'supertest';
 import app from '../app.js';
 import eventsService from '../services/events/index.js';
+import type { Event } from '../types/event.types.js';
 
 describe('App Integration Tests', () => {
-    let mockGetEventsByDate: jest.SpiedFunction<(...args: any[]) => Promise<any[]>>;
+    let mockGetEventsByDate: jest.SpiedFunction<(date: string) => Promise<Event[]>>;
 
     beforeEach(() => {
         mockGetEventsByDate = jest.spyOn(eventsService, 'getEventsByDate');
@@ -30,7 +31,7 @@ describe('App Integration Tests', () => {
                 .get('/healthcheck')
                 .expect('Content-Type', /json/);
 
-            expect(response.body.status).toBe('ok');
+            expect((response.body as { status: string }).status).toBe('ok');
         });
     });
 

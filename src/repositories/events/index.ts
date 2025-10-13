@@ -5,8 +5,9 @@ const eventsRepository = {
     try {
       console.log(`[EventsRepository] Fetching events for date: ${date}`);
 
-      // Busca a resposta completa da API SDE (com referências e resultados)
-      const apiResponse = await sdeClient.getEvents(date);
+      // Busca a resposta completa da API SDE usando o cliente genérico
+      // Path específico: data/{date}/eventos
+      const apiResponse = await sdeClient.get(`data/${date}/eventos`, date);
 
       return apiResponse;
     } catch (error) {

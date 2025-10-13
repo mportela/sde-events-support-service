@@ -1,5 +1,6 @@
 import express, { NextFunction, Request, Response } from 'express';
 import eventsRoutes from './routes/events/index.js';
+import jogosRoutes from './routes/jogos/index.js';
 
 const app = express();
 
@@ -21,6 +22,7 @@ app.get('/healthcheck', (_req: Request, res: Response) => {
 
 // Routes
 app.use('/events', eventsRoutes);
+app.use('/jogos', jogosRoutes);
 
 // 404 handler
 app.use((_req: Request, res: Response) => {

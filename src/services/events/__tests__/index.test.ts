@@ -1,7 +1,7 @@
 import { afterEach, beforeEach, describe, expect, it, jest } from '@jest/globals';
 import eventsRepository from '../../../repositories/events/index.js';
 import eventsService from '../index.js';
-import eventParser from '../parsers/eventParser.js';
+import eventParser from '../../../repositories/events/parsers/eventParser.js';
 
 describe('Events Service', () => {
     let mockGetEventsByDate: jest.SpiedFunction<typeof eventsRepository.getEventsByDate>;

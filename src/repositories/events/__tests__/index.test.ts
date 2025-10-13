@@ -3,11 +3,11 @@ import sdeClient from '../../../clients/sde/index.js';
 import eventsRepository from '../index.js';
 
 describe('Events Repository', () => {
-    let mockGetEvents: jest.SpiedFunction<typeof sdeClient.getEvents>;
+    let mockGet: jest.SpiedFunction<typeof sdeClient.get>;
 
     beforeEach(() => {
-        // Cria spy do método getEvents
-        mockGetEvents = jest.spyOn(sdeClient, 'getEvents');
+        // Cria spy do método get
+        mockGet = jest.spyOn(sdeClient, 'get');
         // Silencia console.error e console.log durante os testes
         jest.spyOn(console, 'error').mockImplementation(() => { });
         jest.spyOn(console, 'log').mockImplementation(() => { });
@@ -33,12 +33,12 @@ describe('Events Repository', () => {
                 }
             };
 
-            mockGetEvents.mockResolvedValueOnce(mockData);
+            mockGet.mockResolvedValueOnce(mockData);
 
             const result = await eventsRepository.getEventsByDate('2025-10-11');
 
-            expect(mockGetEvents).toHaveBeenCalledWith('2025-10-11');
-            expect(mockGetEvents).toHaveBeenCalledTimes(1);
+            expect(mockGet).toHaveBeenCalledWith('data/2025-10-11/eventos', '2025-10-11');
+            expect(mockGet).toHaveBeenCalledTimes(1);
             expect(result).toEqual(mockData);
         });
 
@@ -48,16 +48,16 @@ describe('Events Repository', () => {
                 resultados: { jogos: [] }
             };
 
-            mockGetEvents.mockResolvedValueOnce(mockData);
+            mockGet.mockResolvedValueOnce(mockData);
 
             await eventsRepository.getEventsByDate('2025-12-25');
 
-            expect(mockGetEvents).toHaveBeenCalledWith('2025-12-25');
+            expect(mockGet).toHaveBeenCalledWith('data/2025-12-25/eventos', '2025-12-25');
         });
 
         it('should throw error when SDE client fails', async () => {
             const errorMessage = 'Network error';
-            mockGetEvents.mockRejectedValueOnce(new Error(errorMessage));
+            mockGet.mockRejectedValueOnce(new Error(errorMessage));
 
             await expect(
                 eventsRepository.getEventsByDate('2025-10-11')
@@ -65,7 +65,7 @@ describe('Events Repository', () => {
         });
 
         it('should wrap error with repository context', async () => {
-            mockGetEvents.mockRejectedValueOnce(new Error('API Error'));
+            mockGet.mockRejectedValueOnce(new Error('API Error'));
 
             await expect(
                 eventsRepository.getEventsByDate('2025-10-11')
@@ -73,7 +73,7 @@ describe('Events Repository', () => {
         });
 
         it('should handle non-Error exceptions', async () => {
-            mockGetEvents.mockRejectedValueOnce('String error');
+            mockGet.mockRejectedValueOnce('String error');
 
             await expect(
                 eventsRepository.getEventsByDate('2025-10-11')
@@ -100,7 +100,7 @@ describe('Events Repository', () => {
                 }
             };
 
-            mockGetEvents.mockResolvedValueOnce(mockData);
+            mockGet.mockResolvedValueOnce(mockData);
 
             const result = await eventsRepository.getEventsByDate('2025-10-11');
 

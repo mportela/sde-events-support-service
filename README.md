@@ -203,6 +203,17 @@ GET /events/:date
 ```
 Exemplo: `GET /events/2025-10-11`
 
+### Jogos
+```
+GET /jogos/:id
+```
+Exemplo: `GET /jogos/334218`
+
+Retorna informações detalhadas do jogo incluindo:
+- Dados da competição e esporte
+- Times com escudos
+- Jogadores escalados com fotos e fotos contextuais
+
 ## Estrutura do Projeto
 
 ```

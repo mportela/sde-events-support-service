@@ -1,6 +1,6 @@
 import eventsRepository from '../../repositories/events/index.js';
 import { Event } from '../../types/event.types.js';
-import eventParser from './parsers/eventParser.js';
+import eventParser from '../../repositories/events/parsers/eventParser.js';
 
 const eventsService = {
   async getEventsByDate(date: string): Promise<Event[]> {
