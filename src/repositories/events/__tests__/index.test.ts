@@ -1,16 +1,20 @@
 import { beforeEach, describe, expect, it, jest } from '@jest/globals';
 import sdeClient from '../../../clients/sde/index.js';
+import eventParser from '../parsers/eventParser.js';
 import eventsRepository from '../index.js';
 
 describe('Events Repository', () => {
     let mockGet: jest.SpiedFunction<typeof sdeClient.get>;
+    let mockParseApiResponse: jest.SpiedFunction<typeof eventParser.parseApiResponse>;
 
     beforeEach(() => {
         // Cria spy do método get
         mockGet = jest.spyOn(sdeClient, 'get');
-        // Silencia console.error e console.log durante os testes
+        mockParseApiResponse = jest.spyOn(eventParser, 'parseApiResponse');
+        // Silencia console.error, console.log e console.warn durante os testes
         jest.spyOn(console, 'error').mockImplementation(() => { });
         jest.spyOn(console, 'log').mockImplementation(() => { });
+        jest.spyOn(console, 'warn').mockImplementation(() => { });
     });
 
     afterEach(() => {
@@ -19,40 +23,88 @@ describe('Events Repository', () => {
     });
 
     describe('getEventsByDate', () => {
-        it('should return API response from SDE client', async () => {
-            const mockData = {
+        it('should return parsed events from API response', async () => {
+            const mockApiData = {
                 referencias: {
                     equipes: {
-                        '123': { nome_popular: 'Time A', sigla: 'TIA' }
+                        '1': { nome_popular: 'Flamengo', sigla: 'FLA', escudos: {} }
                     },
                     campeonatos: {},
                     esportes: {}
                 },
                 resultados: {
-                    jogos: []
+                    jogos: [
+                        {
+                            jogo_id: 123,
+                            equipe_mandante_id: 1,
+                            equipe_visitante_id: 2
+                        }
+                    ]
                 }
             };
 
-            mockGet.mockResolvedValueOnce(mockData);
+            const mockParsedEvents = [
+                {
+                    id: '123',
+                    nome: 'Flamengo x Fluminense',
+                    esporte: { id: '1', slug: 'futebol', nome: 'Futebol' },
+                    competicao: { nome: 'Brasileirão' },
+                    times: [],
+                    dataHora: '2025-10-11T21:30:00'
+                }
+            ];
+
+            mockGet.mockResolvedValueOnce(mockApiData);
+            mockParseApiResponse.mockReturnValueOnce(mockParsedEvents);
 
             const result = await eventsRepository.getEventsByDate('2025-10-11');
 
             expect(mockGet).toHaveBeenCalledWith('data/2025-10-11/eventos', '2025-10-11');
             expect(mockGet).toHaveBeenCalledTimes(1);
-            expect(result).toEqual(mockData);
+            expect(mockParseApiResponse).toHaveBeenCalledWith(mockApiData);
+            expect(result).toEqual(mockParsedEvents);
+            expect(result).toHaveLength(1);
         });
 
         it('should pass date parameter correctly', async () => {
-            const mockData = {
-                referencias: {},
+            const mockApiData = {
+                referencias: { equipes: {}, campeonatos: {}, esportes: {} },
                 resultados: { jogos: [] }
             };
 
-            mockGet.mockResolvedValueOnce(mockData);
+            mockGet.mockResolvedValueOnce(mockApiData);
+            mockParseApiResponse.mockReturnValueOnce([]);
 
             await eventsRepository.getEventsByDate('2025-12-25');
 
             expect(mockGet).toHaveBeenCalledWith('data/2025-12-25/eventos', '2025-12-25');
+            expect(mockParseApiResponse).toHaveBeenCalledWith(mockApiData);
+        });
+
+        it('should return empty array if API response is missing referencias', async () => {
+            const mockApiData = {
+                resultados: { jogos: [] }
+            };
+
+            mockGet.mockResolvedValueOnce(mockApiData);
+
+            const result = await eventsRepository.getEventsByDate('2025-10-11');
+
+            expect(result).toEqual([]);
+            expect(mockParseApiResponse).not.toHaveBeenCalled();
+        });
+
+        it('should return empty array if API response is missing resultados', async () => {
+            const mockApiData = {
+                referencias: { equipes: {}, campeonatos: {}, esportes: {} }
+            };
+
+            mockGet.mockResolvedValueOnce(mockApiData);
+
+            const result = await eventsRepository.getEventsByDate('2025-10-11');
+
+            expect(result).toEqual([]);
+            expect(mockParseApiResponse).not.toHaveBeenCalled();
         });
 
         it('should throw error when SDE client fails', async () => {
@@ -80,8 +132,8 @@ describe('Events Repository', () => {
             ).rejects.toThrow('Failed to fetch events from repository: Unknown error');
         });
 
-        it('should return complete API response structure', async () => {
-            const mockData = {
+        it('should parse events with complete data structure', async () => {
+            const mockApiData = {
                 referencias: {
                     equipes: { '1': { nome: 'Time A' }, '2': { nome: 'Time B' } },
                     campeonatos: { '10': { nome: 'Campeonato X' } },
@@ -100,15 +152,28 @@ describe('Events Repository', () => {
                 }
             };
 
-            mockGet.mockResolvedValueOnce(mockData);
+            const mockParsedEvents = [
+                {
+                    id: '12345',
+                    nome: 'Time A x Time B',
+                    esporte: { id: '1', slug: 'futebol', nome: 'Futebol' },
+                    competicao: { nome: 'Campeonato X' },
+                    times: [],
+                    dataHora: '2025-10-11T21:30:00'
+                }
+            ];
+
+            mockGet.mockResolvedValueOnce(mockApiData);
+            mockParseApiResponse.mockReturnValueOnce(mockParsedEvents);
 
             const result = await eventsRepository.getEventsByDate('2025-10-11');
 
-            expect(result).toHaveProperty('referencias');
-            expect(result).toHaveProperty('resultados');
-            expect(result.referencias).toHaveProperty('equipes');
-            expect(result.referencias).toHaveProperty('campeonatos');
-            expect(result.resultados).toHaveProperty('jogos');
+            expect(mockParseApiResponse).toHaveBeenCalledWith(mockApiData);
+            expect(result).toEqual(mockParsedEvents);
+            expect(result[0]).toHaveProperty('id');
+            expect(result[0]).toHaveProperty('nome');
+            expect(result[0]).toHaveProperty('esporte');
+            expect(result[0]).toHaveProperty('competicao');
         });
     });
 });

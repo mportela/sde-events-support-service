@@ -1,6 +1,6 @@
 import sdeClient from '../../clients/sde/index.js';
-import { parseSDEJogo } from './parsers/jogoParser.js';
 import type { Jogo, SDEJogoResponse } from '../../types/jogo.types.js';
+import { parseSDEJogo } from './parsers/jogoParser.js';
 
 /**
  * Repository for Jogo data access

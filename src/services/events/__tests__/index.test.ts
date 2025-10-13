@@ -1,20 +1,16 @@
 import { afterEach, beforeEach, describe, expect, it, jest } from '@jest/globals';
 import eventsRepository from '../../../repositories/events/index.js';
 import eventsService from '../index.js';
-import eventParser from '../../../repositories/events/parsers/eventParser.js';
 
 describe('Events Service', () => {
     let mockGetEventsByDate: jest.SpiedFunction<typeof eventsRepository.getEventsByDate>;
-    let mockParseApiResponse: jest.SpiedFunction<typeof eventParser.parseApiResponse>;
 
     beforeEach(() => {
         jest.clearAllMocks();
-        // Cria spies dos métodos
+        // Cria spy do método
         mockGetEventsByDate = jest.spyOn(eventsRepository, 'getEventsByDate');
-        mockParseApiResponse = jest.spyOn(eventParser, 'parseApiResponse');
         // Silencia console durante os testes
         jest.spyOn(console, 'error').mockImplementation(() => { });
-        jest.spyOn(console, 'warn').mockImplementation(() => { });
         jest.spyOn(console, 'log').mockImplementation(() => { });
     });
 
@@ -23,27 +19,8 @@ describe('Events Service', () => {
     });
 
     describe('getEventsByDate', () => {
-        it('should return parsed events successfully', async () => {
-            const mockApiResponse = {
-                referencias: {
-                    equipes: {
-                        '1': { nome_popular: 'Flamengo', sigla: 'FLA', escudos: {} }
-                    },
-                    campeonatos: {},
-                    esportes: {}
-                },
-                resultados: {
-                    jogos: [
-                        {
-                            jogo_id: 123,
-                            equipe_mandante_id: 1,
-                            equipe_visitante_id: 2
-                        }
-                    ]
-                }
-            };
-
-            const mockParsedEvents = [
+        it('should return events from repository', async () => {
+            const mockEvents = [
                 {
                     id: '123',
                     nome: 'Flamengo x Fluminense',
@@ -73,73 +50,29 @@ describe('Events Service', () => {
                 }
             ];
 
-            mockGetEventsByDate.mockResolvedValueOnce(mockApiResponse);
-            mockParseApiResponse.mockReturnValueOnce(mockParsedEvents);
+            mockGetEventsByDate.mockResolvedValueOnce(mockEvents);
 
             const result = await eventsService.getEventsByDate('2025-10-11');
 
             expect(mockGetEventsByDate).toHaveBeenCalledWith('2025-10-11');
-            expect(mockParseApiResponse).toHaveBeenCalledWith(mockApiResponse);
-            expect(result).toEqual(mockParsedEvents);
+            expect(result).toEqual(mockEvents);
             expect(result).toHaveLength(1);
         });
 
         it('should pass correct date to repository', async () => {
-            const mockApiResponse = {
-                referencias: { equipes: {}, campeonatos: {}, esportes: {} },
-                resultados: { jogos: [] }
-            };
-
-            mockGetEventsByDate.mockResolvedValueOnce(mockApiResponse);
-            mockParseApiResponse.mockReturnValueOnce([]);
+            mockGetEventsByDate.mockResolvedValueOnce([]);
 
             await eventsService.getEventsByDate('2025-12-25');
 
             expect(mockGetEventsByDate).toHaveBeenCalledWith('2025-12-25');
         });
 
-        it('should return empty array if API response is missing referencias', async () => {
-            const mockApiResponse = {
-                resultados: { jogos: [] }
-            };
-
-            mockGetEventsByDate.mockResolvedValueOnce(mockApiResponse);
+        it('should return empty array from repository', async () => {
+            mockGetEventsByDate.mockResolvedValueOnce([]);
 
             const result = await eventsService.getEventsByDate('2025-10-11');
 
             expect(result).toEqual([]);
-            expect(mockParseApiResponse).not.toHaveBeenCalled();
-        });
-
-        it('should return empty array if API response is missing resultados', async () => {
-            const mockApiResponse = {
-                referencias: { equipes: {}, campeonatos: {}, esportes: {} }
-            };
-
-            mockGetEventsByDate.mockResolvedValueOnce(mockApiResponse);
-
-            const result = await eventsService.getEventsByDate('2025-10-11');
-
-            expect(result).toEqual([]);
-            expect(mockParseApiResponse).not.toHaveBeenCalled();
-        });
-
-        it('should return empty array if API response is null', async () => {
-            mockGetEventsByDate.mockResolvedValueOnce(null);
-
-            const result = await eventsService.getEventsByDate('2025-10-11');
-
-            expect(result).toEqual([]);
-            expect(mockParseApiResponse).not.toHaveBeenCalled();
-        });
-
-        it('should return empty array if API response is undefined', async () => {
-            mockGetEventsByDate.mockResolvedValueOnce(undefined);
-
-            const result = await eventsService.getEventsByDate('2025-10-11');
-
-            expect(result).toEqual([]);
-            expect(mockParseApiResponse).not.toHaveBeenCalled();
         });
 
         it('should throw error when repository fails', async () => {
@@ -149,43 +82,10 @@ describe('Events Service', () => {
             await expect(
                 eventsService.getEventsByDate('2025-10-11')
             ).rejects.toThrow(errorMessage);
-
-            expect(mockParseApiResponse).not.toHaveBeenCalled();
         });
 
-        it('should throw error when parser fails', async () => {
-            const mockApiResponse = {
-                referencias: { equipes: {}, campeonatos: {}, esportes: {} },
-                resultados: { jogos: [] }
-            };
-
-            mockGetEventsByDate.mockResolvedValueOnce(mockApiResponse);
-            mockParseApiResponse.mockImplementationOnce(() => {
-                throw new Error('Parser error');
-            });
-
-            await expect(
-                eventsService.getEventsByDate('2025-10-11')
-            ).rejects.toThrow('Parser error');
-        });
-
-        it('should handle multiple events', async () => {
-            const mockApiResponse = {
-                referencias: {
-                    equipes: {},
-                    campeonatos: {},
-                    esportes: {}
-                },
-                resultados: {
-                    jogos: [
-                        { jogo_id: 1 },
-                        { jogo_id: 2 },
-                        { jogo_id: 3 }
-                    ]
-                }
-            };
-
-            const mockParsedEvents = [
+        it('should handle multiple events from repository', async () => {
+            const mockEvents = [
                 {
                     id: '1',
                     nome: 'Jogo 1',
@@ -212,8 +112,7 @@ describe('Events Service', () => {
                 }
             ];
 
-            mockGetEventsByDate.mockResolvedValueOnce(mockApiResponse);
-            mockParseApiResponse.mockReturnValueOnce(mockParsedEvents);
+            mockGetEventsByDate.mockResolvedValueOnce(mockEvents);
 
             const result = await eventsService.getEventsByDate('2025-10-11');
 
@@ -221,27 +120,6 @@ describe('Events Service', () => {
             expect(result[0].id).toBe('1');
             expect(result[1].id).toBe('2');
             expect(result[2].id).toBe('3');
-        });
-
-        it('should handle valid response with empty jogos array', async () => {
-            const mockApiResponse = {
-                referencias: {
-                    equipes: {},
-                    campeonatos: {},
-                    esportes: {}
-                },
-                resultados: {
-                    jogos: []
-                }
-            };
-
-            mockGetEventsByDate.mockResolvedValueOnce(mockApiResponse);
-            mockParseApiResponse.mockReturnValueOnce([]);
-
-            const result = await eventsService.getEventsByDate('2025-10-11');
-
-            expect(mockParseApiResponse).toHaveBeenCalledWith(mockApiResponse);
-            expect(result).toEqual([]);
         });
     });
 });
