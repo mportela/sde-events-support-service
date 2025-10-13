@@ -22,7 +22,7 @@ interface Jogo {
   data_realizacao: string;
   hora_realizacao: string;
   fase_id: number;
-  rodada: number;
+  rodada: number | null;
   sede_id?: number;
   transmissoes?: {
     sem_transmissao: boolean;
@@ -122,16 +122,19 @@ class EventParser {
           nome: timeMandante?.nome_popular || timeMandante?.nome || 'Time Desconhecido',
           sigla: timeMandante?.sigla || '',
           escudo60x60: timeMandante?.escudos?.['60x60'] || '',
-          escudoSvg: timeMandante?.escudos?.svg || ''
+          escudoSvg: timeMandante?.escudos?.svg || '',
+          cores: timeMandante?.cores || null
         },
         {
           nome: timeVisitante?.nome_popular || timeVisitante?.nome || 'Time Desconhecido',
           sigla: timeVisitante?.sigla || '',
           escudo60x60: timeVisitante?.escudos?.['60x60'] || '',
-          escudoSvg: timeVisitante?.escudos?.svg || ''
+          escudoSvg: timeVisitante?.escudos?.svg || '',
+          cores: timeVisitante?.cores || null
         }
       ],
-      dataHora
+      dataHora,
+      rodada: jogo.rodada !== null ? String(jogo.rodada) : null
     };
 
     // Adiciona transmissões se existirem

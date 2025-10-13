@@ -2,6 +2,26 @@
 
 Todas as mudanças notáveis neste projeto serão documentadas neste arquivo.
 
+## [1.8.0] - 2025-10-13
+
+### ✨ Adicionado
+- **Campos rodada e cores nos eventos e jogos**:
+  - Campo `rodada` (string | null) em Event e Jogo types
+  - Campo `cores` (objeto com primaria, secundaria, terciaria) nos times
+  - Parsers atualizados para extrair rodada e cores da API SDE
+  - Retrocompatível com campos opcionais
+
+### 🎨 Benefícios
+- Clientes podem exibir número da rodada em campeonatos de pontos corridos
+- Clientes podem usar cores dos times para customização de UI
+- Segue estrutura de resposta da API SDE
+- Mantém retrocompatibilidade (campos opcionais)
+
+### 🧪 Testes
+- **114 testes passando**
+- **Cobertura**: 98.55% statements, 100% functions
+- 0 erros de lint
+
 ## [1.7.0] - 2025-10-12
 
 ### ✨ Adicionado

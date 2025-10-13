@@ -14,8 +14,14 @@ export interface Event {
     sigla: string;
     escudo60x60: string;
     escudoSvg: string;
+    cores?: {
+      primaria: string;
+      secundaria: string;
+      terciaria: string;
+    } | null;
   }>;
   dataHora: string;
+  rodada?: string | null;
   transmissoes?: {
     semTransmissao: boolean;
     plataformas: Array<{

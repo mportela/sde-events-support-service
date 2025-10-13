@@ -16,6 +16,11 @@ export interface JogoTeam {
     sigla: string;
     escudo60x60: string;
     escudoSvg: string;
+    cores?: {
+        primaria: string;
+        secundaria: string;
+        terciaria: string;
+    } | null;
     jogadores: JogoPlayer[];
 }
 
@@ -35,6 +40,7 @@ export interface Jogo {
     esporte: JogoEsporte;
     competicao: JogoCompeticao;
     times: JogoTeam[];
+    rodada?: string | null;
 }
 
 // SDE API Response Types
@@ -192,7 +198,7 @@ export interface SDEJogoResponse {
         wo: boolean;
         cancelado: boolean;
         decisivo: boolean;
-        rodada: number;
+        rodada: number | null;
         suspenso: boolean;
         vencedor_jogo: string | null;
         transmissoes: Array<{

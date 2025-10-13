@@ -58,7 +58,8 @@ export function parseSDEJogo(sdeResponse: SDEJogoResponse): Jogo {
         competicao: {
             nome: campeonato.nome
         },
-        times
+        times,
+        rodada: resultados.rodada !== null ? String(resultados.rodada) : null
     };
 }
 
@@ -82,6 +83,7 @@ function parseTeamWithPlayers(
         sigla: equipe.sigla,
         escudo60x60: equipe.escudos['60x60'],
         escudoSvg: equipe.escudos.svg,
+        cores: equipe.cores || null,
         jogadores
     };
 }
@@ -136,6 +138,11 @@ export function createMockJogo(): Jogo {
                 sigla: 'BOT',
                 escudo60x60: 'https://s.sde.globo.com/media/organizations/2019/02/04/botafogo-65.png',
                 escudoSvg: 'https://s.sde.globo.com/media/organizations/2019/02/04/botafogo-svg.svg',
+                cores: {
+                    primaria: '#000000',
+                    secundaria: '#ffffff',
+                    terciaria: '#cccccc'
+                },
                 jogadores: [
                     {
                         nome: 'Leonardo Matias Baiersdorf Linck',
@@ -160,6 +167,11 @@ export function createMockJogo(): Jogo {
                 sigla: 'FLA',
                 escudo60x60: 'https://s.sde.globo.com/media/organizations/2018/04/09/Flamengo-65.png',
                 escudoSvg: 'https://s.sde.globo.com/media/organizations/2018/04/10/Flamengo-2018.svg',
+                cores: {
+                    primaria: '#a80000',
+                    secundaria: '#000000',
+                    terciaria: '#000000'
+                },
                 jogadores: [
                     {
                         nome: 'Agustín Daniel Rossi',
@@ -181,6 +193,7 @@ export function createMockJogo(): Jogo {
                     }
                 ]
             }
-        ]
+        ],
+        rodada: '28'
     };
 }
