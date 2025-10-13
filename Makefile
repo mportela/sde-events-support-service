@@ -80,10 +80,10 @@ test-events: ## Testa o endpoint de eventos (requer data como argumento: make te
 	@curl -s http://localhost:3001/events/$(DATE) | jq '.' || curl -s http://localhost:3001/events/$(DATE)
 
 # Setup
-setup: ## Setup completo do projeto (copia .env.example e instala deps)
+setup: ## Setup completo do projeto (copia .env.sample e instala deps)
 	@if [ ! -f .env ]; then \
 		echo "$(GREEN)Criando arquivo .env...$(NC)"; \
-		cp .env.example .env; \
+		cp .env.sample .env; \
 		echo "$(YELLOW)⚠️  Edite o arquivo .env com suas configurações!$(NC)"; \
 	else \
 		echo "$(YELLOW)Arquivo .env já existe$(NC)"; \

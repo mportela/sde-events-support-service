@@ -78,7 +78,7 @@ docker-compose down
 ## 📋 Checklist Antes de Começar
 
 - [ ] Docker e Docker Compose instalados
-- [ ] Arquivo `.env` configurado (copie de `.env.example`)
+- [ ] Arquivo `.env` configurado (copie de `.env.sample`)
 - [ ] Token da API SDE configurado no `.env`
 
 ## 🎯 Diferenças: Dev vs Prod

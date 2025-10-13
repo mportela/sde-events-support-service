@@ -44,7 +44,7 @@
 
 ### Configuração
 - `.nvmrc` - Versão do Node.js
-- `.env.example` - Template de variáveis
+- `.env.sample` - Template de variáveis
 - `tsconfig.json` - Configuração TypeScript
 - `package.json` - Dependências e scripts
 

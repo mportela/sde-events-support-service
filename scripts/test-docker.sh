@@ -25,8 +25,8 @@ echo -e "${GREEN}✅ Docker e Docker Compose estão instalados${NC}\n"
 # Verifica se .env existe
 if [ ! -f .env ]; then
     echo -e "${YELLOW}⚠️  Arquivo .env não encontrado${NC}"
-    echo -e "${YELLOW}Criando .env a partir de .env.example...${NC}"
-    cp .env.example .env
+    echo -e "${YELLOW}Criando .env a partir de .env.sample...${NC}"
+    cp .env.sample .env
     echo -e "${GREEN}✅ Arquivo .env criado${NC}"
     echo -e "${YELLOW}⚠️  Edite o arquivo .env com suas configurações antes de continuar${NC}\n"
 fi

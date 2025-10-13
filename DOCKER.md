@@ -54,7 +54,7 @@ docker-compose down -v
 Certifique-se de ter o arquivo `.env` configurado:
 
 ```bash
-cp .env.example .env
+cp .env.sample .env
 # Edite o .env com suas configurações
 ```
 
