@@ -65,7 +65,7 @@ export interface SDEAtleta {
         '50x50'?: string;
         '80x80'?: string;
         [key: string]: string | undefined;
-    };
+    } | null;
     nacionalidade_id: number | null;
     fotos_contextuais: {
         [equipeId: string]: {
@@ -78,7 +78,7 @@ export interface SDEAtleta {
                 url: string;
             };
         } | null;
-    };
+    } | null;
 }
 
 export interface SDEEquipe {
@@ -181,11 +181,11 @@ export interface SDEJogoResponse {
         equipe_mandante_id: number;
         placar_oficial_mandante: number | null;
         placar_penaltis_mandante: number | null;
-        escalacao_mandante_id: number;
+        escalacao_mandante_id: number | null;
         equipe_visitante_id: number;
         placar_oficial_visitante: number | null;
         placar_penaltis_visitante: number | null;
-        escalacao_visitante_id: number;
+        escalacao_visitante_id: number | null;
         primeiro_atleta_id: number | null;
         segundo_atleta_id: number | null;
         data_realizacao: string;

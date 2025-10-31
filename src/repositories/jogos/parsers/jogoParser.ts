@@ -24,9 +24,13 @@ export function parseSDEJogo(sdeResponse: SDEJogoResponse): Jogo {
     const equipeMandante = referencias.equipes[resultados.equipe_mandante_id];
     const equipeVisitante = referencias.equipes[resultados.equipe_visitante_id];
 
-    // Get escalações
-    const escalacaoMandante = referencias.escalacao[resultados.escalacao_mandante_id];
-    const escalacaoVisitante = referencias.escalacao[resultados.escalacao_visitante_id];
+    // Get escalações (podem ser null quando o jogo ainda não tem escalação definida)
+    const escalacaoMandante = resultados.escalacao_mandante_id
+        ? referencias.escalacao[resultados.escalacao_mandante_id]
+        : null;
+    const escalacaoVisitante = resultados.escalacao_visitante_id
+        ? referencias.escalacao[resultados.escalacao_visitante_id]
+        : null;
 
     // Parse times with jogadores
     const times: JogoTeam[] = [
@@ -59,24 +63,32 @@ export function parseSDEJogo(sdeResponse: SDEJogoResponse): Jogo {
             nome: campeonato.nome
         },
         times,
-        rodada: resultados.rodada !== null ? String(resultados.rodada) : null
+        rodada: resultados.rodada ? String(resultados.rodada) : null
     };
 }
 
 /**
  * Parse team with players from escalação
+ * If escalação is null (jogo sem escalação), returns team with empty jogadores array
  */
 function parseTeamWithPlayers(
     equipe: SDEEquipe,
-    escalacao: SDEEscalacao,
+    escalacao: SDEEscalacao | null,
     atletas: Record<string, SDEAtleta>,
     equipeId: number
 ): JogoTeam {
     // Get all players from escalação (titulares)
-    const jogadores: JogoPlayer[] = escalacao.titulares.map(titular => {
-        const atleta = atletas[titular.atleta_id];
-        return parsePlayer(atleta, equipeId);
-    });
+    // If escalação is null, return empty array
+    // Filter out players that don't exist in atletas dictionary
+    const jogadores: JogoPlayer[] = escalacao?.titulares
+        .map(titular => {
+            const atleta = atletas[titular.atleta_id];
+            if (!atleta) {
+                return null;
+            }
+            return parsePlayer(atleta, equipeId);
+        })
+        .filter((jogador): jogador is JogoPlayer => jogador !== null) ?? [];
 
     return {
         nome: equipe.nome_popular,
@@ -93,15 +105,16 @@ function parseTeamWithPlayers(
  */
 function parsePlayer(atleta: SDEAtleta, equipeId: number): JogoPlayer {
     // Get foto 319x388 or fallback to other sizes
-    const foto_319x388 = atleta.fotos['319x388'] ||
-        atleta.fotos['300x300'] ||
-        atleta.fotos['220x220'] ||
-        atleta.fotos['140x140'] ||
+    // Handle case where atleta.fotos is null
+    const foto_319x388 = atleta.fotos?.['319x388'] ||
+        atleta.fotos?.['300x300'] ||
+        atleta.fotos?.['220x220'] ||
+        atleta.fotos?.['140x140'] ||
         '';
 
     // Extract fotos_contextuais URLs for this equipe
     const fotosContextuaisUrls: string[] = [];
-    const fotosContextuais = atleta.fotos_contextuais[String(equipeId)];
+    const fotosContextuais = atleta.fotos_contextuais?.[String(equipeId)];
 
     if (fotosContextuais?.spotlight) {
         fotosContextuaisUrls.push(fotosContextuais.spotlight.url);

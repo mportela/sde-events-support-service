@@ -2,6 +2,37 @@
 
 Todas as mudanças notáveis neste projeto serão documentadas neste arquivo.
 
+## [1.8.1] - 2025-10-31
+
+### 🐛 Corrigido
+- **Bug ao buscar jogos sem escalação**:
+  - Corrigido erro `Cannot read properties of undefined (reading 'titulares')` quando jogo não possui escalação definida
+  - Atualizado `escalacao_mandante_id` e `escalacao_visitante_id` para aceitar `number | null` nos types
+  - Parser agora usa optional chaining para acessar escalação de forma segura
+  - Retorna `jogadores: []` (array vazio) quando o jogo não tem escalação
+  - Mantém retrocompatibilidade: jogos com escalação continuam funcionando normalmente
+
+- **Bug ao buscar jogos com atletas sem fotos**:
+  - Corrigido erro `Cannot read properties of null (reading '319x388')` quando atleta não possui fotos
+  - Atualizado tipo `SDEAtleta.fotos` para aceitar `null`
+  - Atualizado tipo `SDEAtleta.fotos_contextuais` para aceitar `null`
+  - Parser agora usa optional chaining para acessar fotos de forma segura
+  - Retorna string vazia `''` para `foto_319x388` quando fotos são null
+  - Retorna array vazio `[]` para `fotos_contextuais` quando são null
+  - Filtra jogadores não encontrados no dicionário de atletas
+
+### 🧪 Testes
+- Adicionado teste específico para cenário de jogo sem escalação
+- Adicionado teste específico para atleta com fotos null
+- **116 testes passando** (+2 novos testes)
+- **Cobertura**: 98.55% statements, 87.17% branches, 100% functions
+- 0 erros de lint
+
+### 📝 Contexto
+- Alguns jogos (especialmente amistosos e jogos futuros) podem não ter escalação definida na API SDE
+- Alguns atletas podem não ter fotos cadastradas (fotos: null ou fotos_contextuais: null)
+- As correções garantem que esses jogos retornem dados disponíveis sem erros
+
 ## [1.8.0] - 2025-10-13
 
 ### ✨ Adicionado
